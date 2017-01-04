@@ -1,6 +1,6 @@
 # skills-pe
   
-You have 24 hours to complete the following tasks. Automate as much as possible and be creative (the requirements below are minimum requirements).  If you make assumptions when completing the steps, be sure to discuss those as part of your final documentation.  Use the DigitalOcean API key provided via email.
+You have 24 hours to complete the following tasks. Automate as much as possible and be creative (the requirements below are minimum requirements).  If you make assumptions when completing the steps, be sure to discuss those as part of your final documentation.  Use the DigitalOcean API token provided via email.
 
 TASK 1   
 Create a DigitalOcean droplet with the following:  
@@ -18,7 +18,7 @@ This script should output the current date and time every 10 seconds, in format 
 TASK 2    
 Log into droplet  
 Configure system to disallow password based login (allow key-based login only)  
-Create a startup script that will run as the “wannabe” user and will launch a docker container inside the droplet.  The container should run in the background and execute /usr/local/bin/<yourscript> from the droplet filesystem   
+Create a startup script that will run as the “wannabe” user and will launch a docker container inside the droplet.  The container should run in the background and execute your script from the droplet filesystem   
 When finished with configuration, leave the droplet in a powered-off state
 
 TASK 3    
