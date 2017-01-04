@@ -8,8 +8,8 @@ CentOS 7.x 64-bit OS
 SSH key-based login  
 New York 1 region  
 1 vCPU  
-1024 MB RAM  
-30GB disk  
+512 MB RAM  
+20GB disk  
 non-privileged account “wannabe” with password set to “P@ssw0rd”  
 US/Central timezone  
 script in /usr/local/bin (language of your choosing):  
