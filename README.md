@@ -1,6 +1,6 @@
 # skills-pe
   
-You have 24 hours to complete the following tasks. Automate as much as possible and be creative (the requirements below are minimum requirements).  If you make assumptions when completing the steps, be sure to discuss those as part of your final documentation.  Use the DigitalOcean API token provided via email.
+You have 24 hours to complete the following tasks. Time begins when you fork the repo.  Automate as much as possible and be creative (the requirements below are minimum requirements).  If you make assumptions when completing the steps, be sure to discuss those as part of your final documentation.  Use the DigitalOcean API token provided via email.
 
 TASK 1   
 Create a DigitalOcean droplet with the following:  
