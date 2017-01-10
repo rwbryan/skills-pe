@@ -1,5 +1,26 @@
 # skills-pe
   
+TASK 1
+  DigitalOCean Droplet created with the following options:
+      OS: CentOS 7.3.1611 x64
+      RAM: 512M
+      CPU: 1
+      SSD: 20G
+      Net: 1G
+      Region: New York
+      Data Center: 1
+
+  Created SSH Public/Private Keys loaded Public key in Droplet config
+  Able to connect to droplet using Putty 
+  Created account wannabe with provided password
+  Changed time zone to Central
+  Created a shell script to run date every 10 seconds
+      /usr/local/bin/t10.sh
+  
+  
+  
+  
+  
 You have 24 hours to complete the following tasks. Time begins when you fork the repo.  Automate as much as possible and be creative (the requirements below are minimum requirements).  If you make assumptions when completing the steps, be sure to discuss those as part of your final documentation.  Use the DigitalOcean API token provided via email.
 
 TASK 1   
