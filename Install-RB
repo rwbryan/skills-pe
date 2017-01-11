@@ -1,0 +1,112 @@
+Steps used for setting up cloud instance
+
+000 - Create DigitalOcean CentOS Droplet
+      
+      OS          = CentOS 7.3.1611 x64
+      CPU         = 1
+      RAM         = 512M
+      SSD         = 20G
+      Net         = 1G
+      Region      = New York
+      Data Center = 1
+      ->SSH Keys (Next Step)
+      Choose a hostname
+      Click [create]
+         (wait a few min for the server to finish installing)
+      When the droplet server is finished copy the IP address (you will need it for step 002)
+      
+001 - Create Public/Private Keys <-
+
+      Open puttygen
+       - verify SSH-2 RSA is default
+       - click [Generate]
+          - will ask you to generate random vaules with mouse
+              - when finished and the key is generated enter in the passphrase and confirm the passphrase
+       - Save the public and private key (remember the path you saved these two files)
+       - Add the public key into the SSH keys into the previous step
+       
+002 - Add new server to putty
+
+      Open putty
+        In the "Host Name (or IP address)" add the IP address from step 000
+          root@IP-address
+        Under Connection 
+              Under SSH
+                   Under Auth
+                        click on [Browse] and point to the private key you saved from step 001
+        Click on Session at the top left of the putty window
+        In the Saved Sessions box enter a easy to remember name of this host
+        Click on [Save]
+ 
+003 - Connect to new virtual server
+
+      Open putty
+        Select saved config from step 002 in the Saved Sessions and click [Load]
+          click [Open]
+            This will open a connection to the virtual server
+              NOTE: select [yes] if it asks you about a new key set
+        Use the passphrase generated from step 001
+          This will give you access to the virtual server
+          
+004 - Create the wannabe account
+
+      Run the following commands
+      # useradd wannabe
+      # passwd wannabe 
+          Password = P@ssw0rd
+
+005 - Change time zone to central time zone
+      
+      Run the following commands
+      # mv /etc/localtime /etc/localtime.bak
+      # ln -s /usr/share/zoneinfo/America/Chicage /etc/localtime
+      Run the date command to confirm correct time zone
+      # date
+          
+006 - Setup the ntp service
+
+      Run the following commands
+      # yum -y install ntp
+      Edit the ntp file
+      # vi /etc/ntp.conf
+          Comment out the following:
+            #server 0.centos.pool.ntp.org iburst
+            #server 1.centos.pool.ntp.org iburst
+            #server 2.centos.pool.ntp.org iburst
+            #server 3.centos.pool.ntp.org iburst
+          Add the following servers below
+            server 0.pool.ntp.org
+            server 1.pool.ntp.org
+            server 2.pool.ntp.org
+            server 3.pool.ntp.org
+      Run the following commands to sync ntp
+      # service ntpd stop
+      # ntpdate pool.ntp.org
+      # service ntpd start
+      # chkconfig ntpd on
+      
+007 - Create Script to display current date and time every 10 seconds
+
+    Run the following commands
+    # cd /usr/local/bin
+    # vi t10.sh
+        #Runs date/time every 10 seconds
+        while true ; do date & sleep 10; done
+   Test the following shell script
+    # sh t10.sh
+        display should show date and time increments every ten seconds
+        
+008 - Disable password based login
+
+    
+   
+
+      
+      
+
+      
+
+
+
+      
+        
