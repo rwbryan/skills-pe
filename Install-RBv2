@@ -1,0 +1,194 @@
+Setting up Alpha Droplet
+
+000 - Install doctl on local CentOS virt
+
+      - Download the doctl tar file
+      #wget https://github.com/digitalocean/doctl/releases/download/v1.4.0/doctl-1.4.0-linux-amd64.tar.gz
+
+      - Uncompress the zip file
+      #tar -xf ~/doctl-1.4.0-linux-amd64.tar.gz
+
+      - Move the doctl folder
+      #mv ~/doctl /usr/local/bin
+
+      - move to the working folder
+      #cd /usr/local/bin
+
+001 - Enter in the HA Token
+
+      - Run doctl command to enter in the token
+      #doctl auth init
+
+	DigitalOcean access token:b68a5870c622bcb08529bac22eedac2ab6bd8115187b97b2c86db3400cb406c5
+        Validating token: OK
+
+     NOTE: The location of the token/config file created is in this directory 
+	   ~/.config/doctl/config.yaml
+
+002 - List current virtual servers and keys
+
+      - Run doctl command to display current virtual servers
+      #doctl compute droplet list
+
+      - Run doctl command to display SSH keys
+      #doctl compute ssh-key list
+
+003 - Create and import new SSH key
+
+      - Run command to generate new SSH key
+      #cd /root/.ssh/
+      #ssh-keygen -t rsa 
+
+      - Run command to import new SSH key to DigitalOcean
+      #doctl compute ssh-key import robert --public-key-file ~/.ssh/id_rsa.pub
+
+      - Run command to display new SSH key
+      #doctl compute ssh-key list
+      ID 		NAME		FingerPrint
+      5934521      	robert		ee:b8:c5:02:9c:ad:7b:a5:5e:e1:98:90:4f:a9:d8:ca
+
+004 - Create new server
+
+      - Run the doctl command to create new server (use the ID from SSH key list for --ssh-keys)
+      #doctl compute droplet create centos7-robert  --size 512mb --region nyc1 --image centos-7-x64 --ssh-keys 5934521
+
+005 - SSH to new server
+
+      - Run doctl command to ssh to new server
+      #doctl compute ssh centos7-robert
+
+006 - Disable password based login
+
+      - Edit the following file and change the line of code
+      #vi /etc/ssh/sshd_config
+      	#PermitRootLogin yes
+	to  
+    	PermitRootLogin without-password
+
+007 - Create the wannabe account
+
+      - Run the following commands
+      # useradd wannabe
+      # passwd wannabe    
+         password = P@ssw0rd
+
+
+
+008 - Change time zone to central time zone
+
+     - Run the following commands      
+     # mv /etc/localtime /etc/localtime.bak   
+     # ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
+      
+    Run the date command to confirm correct time zone
+    # date
+ 
+
+009 - Setup the ntp service
+
+    - Run the following command  
+      # yum -y install ntp
+ 
+    - Edit the ntp file  
+      # vi /etc/ntp.conf
+        Comment out the following lines:
+      #server 0.centos.pool.ntp.org iburst
+      #server 1.centos.pool.ntp.org iburst
+      #server 2.centos.pool.ntp.org iburst
+      #server 3.centos.pool.ntp.org iburst
+          
+        Add the following servers below the commented out lines:            
+       server 0.pool.ntp.org       
+       server 1.pool.ntp.org      
+       server 2.pool.ntp.org     
+       server 3.pool.ntp.org
+
+      - Run the following commands to sync ntp
+      # service ntpd stop 
+      # ntpdate pool.ntp.org
+      # service ntpd start
+      # chkconfig ntpd on
+ 
+      - Run date to verify correct time
+      #date
+
+010 - Create Script to display current date and time every 10 seconds
+
+      - Run the following commands
+      #cd /usr/local/bin
+      #vi t10.sh
+        #Runs date every 10 seconds
+        while true ; do date & sleep 10; done
+
+      - Test the following shell script
+      #sh t10.sh
+       
+011 - Install Docker Engine Part I (create repo)
+
+      - Create the following file in /etc/yum.repos.d
+      #touch docker.repo
+       Add lines into following file
+      #vi docker.repo
+	[dockerrepo]
+	name=Docker Repository
+	baseurl=https://yum.dockerproject.org/repo/main/centos/7/	
+	enabled=1
+	gpgcheck=1
+	gpgkey=https://yum.dockerproject.org/gpg
+
+012 - Install Docker Engine Part II (install Docker)
+
+      - Run command to install docker
+      #yum install -y docker-engine
+      - Enable the Docker service
+      #systemctl enable docker.service
+      - Start docker
+      #systemctl start docker
+     
+013 - Confirm docker is working 
+
+     # docker run docker/whalesay cowsay moo
+       Unable to find image 'docker/whalesay:latest' locally
+       latest: Pulling from docker/whalesay
+       e190868d63f8: Pull complete
+       909cd34c6fd7: Pull complete
+       0b9bfabab7c1: Pull complete
+       a3ed95caeb02: Pull complete
+       00bf65475aba: Pull complete
+       c57b6bcc83e3: Pull complete
+       8978f6879e2f: Pull complete
+       8eed3712d2cf: Pull complete
+Digest: sha256:178598e51a26abbc958b8a2e48825c90bc22e641de3d31e18aaf55f3258ba93b
+Status: Downloaded newer image for docker/whalesay:latest
+ _____
+< moo >
+ -----
+    \
+     \
+      \
+                    ##        .
+              ## ## ##       ==
+           ## ## ## ##      ===
+       /""""""""""""""""___/ ===
+  ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
+       \______ o          __/
+        \    \        __/
+          \____\______/
+	  
+   
+014 - Create a Docker container
+	
+      - Run/create a new docker container
+      #docker run --name rob -it debian
+
+      This will open and place you into a new Docker container
+      <exit>
+
+015 - List docker images
+  
+      - List docker images
+      #docker images
+      REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+      hello-world         latest              48b5124b2768        2 days ago          1.84 kB
+      debian              latest              19134a8202e7        4 weeks ago         123 MB
+      docker/whalesay 	  latest              6b362a9f73eb        20 months ago       247 MB
