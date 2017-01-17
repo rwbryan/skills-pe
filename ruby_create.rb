@@ -4,7 +4,7 @@
 #!/usr/bin/ruby
 
 require 'droplet_kit'
-token='TOKEN-NUMBER'
+token='API TOKEN'
 client = DropletKit::Client.new(access_token: token)
 
 droplet = DropletKit::Droplet.new(name: 'RBserver', region: 'nyc1', size: '512m', image: 'CentOS-7-3-1611-x64')
